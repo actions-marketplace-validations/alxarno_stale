@@ -1,4 +1,4 @@
-name: 'Close Stale Issues'
+name: 'Close Stale Issues With Assignes'
 description: 'Close issues and pull requests with no recent activity'
 author: 'GitHub'
 inputs:
