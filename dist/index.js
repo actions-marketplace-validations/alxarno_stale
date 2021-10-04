@@ -782,6 +782,8 @@ class IssuesProcessor {
             // so that close calculations work correctly
             const newUpdatedAtDate = new Date();
             issue.updated_at = newUpdatedAtDate.toString();
+            // assigne logins
+            const assigneLogins = issue.assignees.map(v => "@" + v.login).join(" ");
             if (!skipMessage) {
                 try {
                     this._consumeIssueOperation(issue);
@@ -791,7 +793,7 @@ class IssuesProcessor {
                             owner: github_1.context.repo.owner,
                             repo: github_1.context.repo.repo,
                             issue_number: issue.number,
-                            body: staleMessage
+                            body: `${assigneLogins} ${staleMessage}`
                         });
                     }
                 }
