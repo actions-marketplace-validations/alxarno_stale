@@ -770,7 +770,7 @@ export class IssuesProcessor {
     issue.updated_at = newUpdatedAtDate.toString();
 
     // assigne logins
-    const assigneLogins: string = issue.assignees.login.map(v => "@"+v).join(" ")
+    const assigneLogins: string = issue.assignees.map(v => "@"+v.login).join(" ")
 
     if (!skipMessage) {
       try {
