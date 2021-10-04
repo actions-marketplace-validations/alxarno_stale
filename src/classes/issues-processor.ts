@@ -769,6 +769,8 @@ export class IssuesProcessor {
     const newUpdatedAtDate: Date = new Date();
     issue.updated_at = newUpdatedAtDate.toString();
 
+    const assigneLogins: string = issue.assignees.login.map(v => "@"+v).join(" ")
+
     if (!skipMessage) {
       try {
         this._consumeIssueOperation(issue);
@@ -779,7 +781,7 @@ export class IssuesProcessor {
             owner: context.repo.owner,
             repo: context.repo.repo,
             issue_number: issue.number,
-            body: staleMessage
+            body: `${assigneLogins} ${staleMessage}`
           });
         }
       } catch (error) {
