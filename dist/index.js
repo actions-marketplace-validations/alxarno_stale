@@ -436,6 +436,8 @@ class IssuesProcessor {
             (_a = this.statistics) === null || _a === void 0 ? void 0 : _a.incrementProcessedItemsCount(issue);
             const issueLogger = new issue_logger_1.IssueLogger(issue);
             issueLogger.info(`Found this $$type last updated at: ${logger_service_1.LoggerService.cyan(issue.updated_at)}`);
+            issueLogger.info(`Calling _processIfIssueUnlabled`);
+            yield this._processIfIssueUnlabled(issue);
             // calculate string based messages for this issue
             const staleMessage = issue.isPullRequest
                 ? this.options.stalePrMessage
@@ -704,6 +706,28 @@ class IssuesProcessor {
             }
         });
     }
+    _processIfIssueUnlabled(issue) {
+        return __awaiter(this, void 0, void 0, function* () {
+            const issueLogger = new issue_logger_1.IssueLogger(issue);
+            const lablesNames = issue.labels.map(v => v.name);
+            issueLogger.info(`issue labels: ${lablesNames}`);
+            issueLogger.info(`required labels: ${this.options.requiredLables}`);
+            for (const v of this.options.requiredLables) {
+                if (!lablesNames.includes(v)) {
+                    const assigneLogins = issue.assignees
+                        .map(assign => `@${assign.login}`)
+                        .join(' ');
+                    yield this.client.issues.createComment({
+                        owner: github_1.context.repo.owner,
+                        repo: github_1.context.repo.repo,
+                        issue_number: issue.number,
+                        body: `${assigneLogins} ${this.options.requiredLablesMessage}`
+                    });
+                    break;
+                }
+            }
+        });
+    }
     // handle all of the stale issue logic when we find a stale issue
     _processStaleIssue(issue, staleLabel, staleMessage, labelsToAddWhenUnstale, labelsToRemoveWhenUnstale, closeMessage, closeLabel) {
         return __awaiter(this, void 0, void 0, function* () {
@@ -783,7 +807,9 @@ class IssuesProcessor {
             const newUpdatedAtDate = new Date();
             issue.updated_at = newUpdatedAtDate.toString();
             // assigne logins
-            const assigneLogins = issue.assignees.map(v => "@" + v.login).join(" ");
+            const assigneLogins = issue.assignees
+                .map(v => '@' + v.login)
+                .join(' ');
             if (!skipMessage) {
                 try {
                     this._consumeIssueOperation(issue);
@@ -2186,7 +2212,9 @@ function _getAndValidateArgs() {
         ignoreUpdates: core.getInput('ignore-updates') === 'true',
         ignoreIssueUpdates: _toOptionalBoolean('ignore-issue-updates'),
         ignorePrUpdates: _toOptionalBoolean('ignore-pr-updates'),
-        exemptDraftPr: core.getInput('exempt-draft-pr') === 'true'
+        exemptDraftPr: core.getInput('exempt-draft-pr') === 'true',
+        requiredLables: core.getInput('required-labels').split(','),
+        requiredLablesMessage: core.getInput('required-labels-message')
     };
     for (const numberInput of [
         'days-before-stale',

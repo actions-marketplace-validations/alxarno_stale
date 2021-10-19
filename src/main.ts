@@ -88,7 +88,7 @@ function _getAndValidateArgs(): IIssuesProcessorOptions {
     ignoreIssueUpdates: _toOptionalBoolean('ignore-issue-updates'),
     ignorePrUpdates: _toOptionalBoolean('ignore-pr-updates'),
     exemptDraftPr: core.getInput('exempt-draft-pr') === 'true',
-    requiredLables: (core.getInput('required-labels') || '').split(','),
+    requiredLables: core.getInput('required-labels').split(','),
     requiredLablesMessage: core.getInput('required-labels-message')
   };
 

@@ -190,6 +190,7 @@ export class IssuesProcessor {
       )}`
     );
 
+    issueLogger.info(`Calling _processIfIssueUnlabled`);
     await this._processIfIssueUnlabled(issue);
 
     // calculate string based messages for this issue
@@ -620,6 +621,7 @@ export class IssuesProcessor {
     const lablesNames = issue.labels.map(v => v.name);
     issueLogger.info(`issue labels: ${lablesNames}`);
     issueLogger.info(`required labels: ${this.options.requiredLables}`);
+
     for (const v of this.options.requiredLables) {
       if (!lablesNames.includes(v)) {
         const assigneLogins: string = issue.assignees

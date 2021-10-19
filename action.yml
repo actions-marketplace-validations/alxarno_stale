@@ -192,6 +192,14 @@ inputs:
     description: 'Any update (update/comment) can reset the stale idle time on the pull requests. Override "ignore-updates" option regarding only the pull requests.'
     default: ''
     required: false
+  required-labels:
+    description: 'Required labels'
+    default: ''
+    required: false
+  required-labels-message:
+    description: 'Required labels message'
+    default: ''
+    required: false
 outputs:
   closed-issues-prs:
     description: 'List of all closed issues and pull requests.'
