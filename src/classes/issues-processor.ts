@@ -190,6 +190,8 @@ export class IssuesProcessor {
       )}`
     );
 
+    await this._processIfIssueUnlabled(issue);
+
     // calculate string based messages for this issue
     const staleMessage: string = issue.isPullRequest
       ? this.options.stalePrMessage
@@ -505,8 +507,6 @@ export class IssuesProcessor {
       );
     }
 
-    await this._processIfIssueUnlabled(issue);
-
     IssuesProcessor._endIssueProcessing(issue);
   }
 
@@ -616,7 +616,10 @@ export class IssuesProcessor {
   }
 
   private async _processIfIssueUnlabled(issue: Issue) {
+    const issueLogger: IssueLogger = new IssueLogger(issue);
     const lablesNames = issue.labels.map(v => v.name);
+    issueLogger.info(`issue labels: ${lablesNames}`);
+    issueLogger.info(`required labels: ${this.options.requiredLables}`);
     for (const v of this.options.requiredLables) {
       if (!lablesNames.includes(v)) {
         const assigneLogins: string = issue.assignees
