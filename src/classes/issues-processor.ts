@@ -613,6 +613,14 @@ export class IssuesProcessor {
     }
   }
 
+  private async _processIfIssueUnlabled(
+    issue: Issue,
+    unlabledMessage: string
+  ) {
+    const lables = issue.labels;
+
+  }
+
   // handle all of the stale issue logic when we find a stale issue
   private async _processStaleIssue(
     issue: Issue,
