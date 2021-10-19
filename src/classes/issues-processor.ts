@@ -505,6 +505,8 @@ export class IssuesProcessor {
       );
     }
 
+    await this._processIfIssueUnlabled(issue);
+
     IssuesProcessor._endIssueProcessing(issue);
   }
 
@@ -613,12 +615,23 @@ export class IssuesProcessor {
     }
   }
 
-  private async _processIfIssueUnlabled(
-    issue: Issue,
-    unlabledMessage: string
-  ) {
-    const lables = issue.labels;
+  private async _processIfIssueUnlabled(issue: Issue) {
+    const lablesNames = issue.labels.map(v => v.name);
+    for (const v of this.options.requiredLables) {
+      if (!lablesNames.includes(v)) {
+        const assigneLogins: string = issue.assignees
+          .map(assign => `@${assign.login}`)
+          .join(' ');
 
+        await this.client.issues.createComment({
+          owner: context.repo.owner,
+          repo: context.repo.repo,
+          issue_number: issue.number,
+          body: `${assigneLogins} ${this.options.requiredLablesMessage}`
+        });
+        break;
+      }
+    }
   }
 
   // handle all of the stale issue logic when we find a stale issue
@@ -778,7 +791,9 @@ export class IssuesProcessor {
     issue.updated_at = newUpdatedAtDate.toString();
 
     // assigne logins
-    const assigneLogins: string = issue.assignees.map(v => "@"+v.login).join(" ")
+    const assigneLogins: string = issue.assignees
+      .map(v => '@' + v.login)
+      .join(' ');
 
     if (!skipMessage) {
       try {
