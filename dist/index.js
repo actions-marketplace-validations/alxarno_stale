@@ -436,8 +436,10 @@ class IssuesProcessor {
             (_a = this.statistics) === null || _a === void 0 ? void 0 : _a.incrementProcessedItemsCount(issue);
             const issueLogger = new issue_logger_1.IssueLogger(issue);
             issueLogger.info(`Found this $$type last updated at: ${logger_service_1.LoggerService.cyan(issue.updated_at)}`);
-            issueLogger.info(`Calling _processIfIssueUnlabled`);
-            yield this._processIfIssueUnlabled(issue);
+            if (!issue.isPullRequest) {
+                issueLogger.info(`Calling _processIfIssueUnlabled`);
+                yield this._processIfIssueUnlabled(issue);
+            }
             // calculate string based messages for this issue
             const staleMessage = issue.isPullRequest
                 ? this.options.stalePrMessage

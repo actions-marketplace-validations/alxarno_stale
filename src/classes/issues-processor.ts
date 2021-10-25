@@ -190,9 +190,10 @@ export class IssuesProcessor {
       )}`
     );
 
-    issueLogger.info(`Calling _processIfIssueUnlabled`);
-    await this._processIfIssueUnlabled(issue);
-
+    if (!issue.isPullRequest) {
+      issueLogger.info(`Calling _processIfIssueUnlabled`);
+      await this._processIfIssueUnlabled(issue);
+    }
     // calculate string based messages for this issue
     const staleMessage: string = issue.isPullRequest
       ? this.options.stalePrMessage
