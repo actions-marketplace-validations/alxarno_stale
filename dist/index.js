@@ -713,7 +713,7 @@ class IssuesProcessor {
             issueLogger.info(`issue labels: ${lablesNames}`);
             issueLogger.info(`required labels: ${this.options.requiredLables}`);
             for (const v of this.options.requiredLables) {
-                if (!lablesNames.includes(v)) {
+                if (!lablesNames.find(a => a.includes(v))) {
                     const assigneLogins = issue.assignees
                         .map(assign => `@${assign.login}`)
                         .join(' ');
