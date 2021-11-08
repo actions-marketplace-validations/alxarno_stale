@@ -714,6 +714,12 @@ class IssuesProcessor {
             const lablesNames = issue.labels.map(v => v.name);
             issueLogger.info(`issue labels: ${lablesNames}`);
             issueLogger.info(`required labels: ${this.options.requiredLables}`);
+            for (const v of this.options.exemptionLabels) {
+                if (lablesNames.find(a => a.includes(v))) {
+                    issueLogger.info(`found exemption label: ${v}`);
+                    return;
+                }
+            }
             for (const v of this.options.requiredLables) {
                 if (!lablesNames.find(a => a.includes(v))) {
                     const assigneLogins = issue.assignees
@@ -2216,6 +2222,7 @@ function _getAndValidateArgs() {
         ignorePrUpdates: _toOptionalBoolean('ignore-pr-updates'),
         exemptDraftPr: core.getInput('exempt-draft-pr') === 'true',
         requiredLables: core.getInput('required-labels').split(','),
+        exemptionLabels: core.getInput('exemption-labels').split(','),
         requiredLablesMessage: core.getInput('required-labels-message')
     };
     for (const numberInput of [

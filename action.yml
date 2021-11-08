@@ -196,6 +196,10 @@ inputs:
     description: 'Required labels'
     default: ''
     required: false
+  exemption-labels:
+    description: 'Exemption labels'
+    default: ''
+    required: false
   required-labels-message:
     description: 'Required labels message'
     default: ''

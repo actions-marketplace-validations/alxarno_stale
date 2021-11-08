@@ -52,5 +52,6 @@ export interface IIssuesProcessorOptions {
   ignorePrUpdates: boolean | undefined;
   exemptDraftPr: boolean;
   requiredLables: string[];
+  exemptionLabels: string[];
   requiredLablesMessage: string;
 }
