@@ -720,8 +720,12 @@ class IssuesProcessor {
                     return;
                 }
             }
+            const requiredAlreadyMarkedIssue = lablesNames.find(a => a === this.options.requiredIssueAlreadyMarkedLabel) && this.options.requiredIssueAlreadyMarkedLabel !== '';
             for (const v of this.options.requiredLables) {
                 if (!lablesNames.find(a => a.includes(v))) {
+                    if (requiredAlreadyMarkedIssue) {
+                        break;
+                    }
                     const assigneLogins = issue.assignees
                         .map(assign => `@${assign.login}`)
                         .join(' ');
@@ -730,6 +734,12 @@ class IssuesProcessor {
                         repo: github_1.context.repo.repo,
                         issue_number: issue.number,
                         body: `${assigneLogins} ${this.options.requiredLablesMessage}`
+                    });
+                    yield this.client.issues.addLabels({
+                        issue_number: issue.number,
+                        labels: [this.options.requiredIssueAlreadyMarkedLabel],
+                        owner: github_1.context.repo.owner,
+                        repo: github_1.context.repo.repo
                     });
                     break;
                 }
@@ -2223,7 +2233,8 @@ function _getAndValidateArgs() {
         exemptDraftPr: core.getInput('exempt-draft-pr') === 'true',
         requiredLables: core.getInput('required-labels').split(','),
         exemptionLabels: core.getInput('exemption-labels').split(','),
-        requiredLablesMessage: core.getInput('required-labels-message')
+        requiredLablesMessage: core.getInput('required-labels-message'),
+        requiredIssueAlreadyMarkedLabel: core.getInput('required-issue-already-marked-label')
     };
     for (const numberInput of [
         'days-before-stale',
