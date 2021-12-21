@@ -1,8 +1,8 @@
 import * as core from '@actions/core';
-import {IssuesProcessor} from './classes/issues-processor';
-import {isValidDate} from './functions/dates/is-valid-date';
-import {IIssuesProcessorOptions} from './interfaces/issues-processor-options';
-import {Issue} from './classes/issue';
+import {IssuesProcessor} from './src/classes/issues-processor';
+import {isValidDate} from './src/functions/dates/is-valid-date';
+import {IIssuesProcessorOptions} from './src/interfaces/issues-processor-options';
+import {Issue} from './src/classes/issue';
 
 async function _run(): Promise<void> {
   try {
@@ -91,7 +91,9 @@ function _getAndValidateArgs(): IIssuesProcessorOptions {
     requiredLables: core.getInput('required-labels').split(','),
     exemptionLabels: core.getInput('exemption-labels').split(','),
     requiredLablesMessage: core.getInput('required-labels-message'),
-    requiredIssueAlreadyMarkedLabel: core.getInput('required-issue-already-marked-label'),
+    requiredIssueAlreadyMarkedLabel: core.getInput(
+      'required-issue-already-marked-label'
+    )
   };
 
   for (const numberInput of [

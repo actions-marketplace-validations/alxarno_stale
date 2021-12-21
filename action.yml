@@ -204,6 +204,10 @@ inputs:
     description: 'Required labels message'
     default: ''
     required: false
+  required-issue-already-marked-label:
+    description: "Label for already checked required labels"
+    default: ''
+    required: false
 outputs:
   closed-issues-prs:
     description: 'List of all closed issues and pull requests.'

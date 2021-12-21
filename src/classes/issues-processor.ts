@@ -628,17 +628,18 @@ export class IssuesProcessor {
         issueLogger.info(`found exemption label: ${v}`);
         return;
       }
-    } 
+    }
 
-    let requiredAlreadyMarkedIssue = lablesNames.find(a => a == this.options.requiredIssueAlreadyMarkedLabel);
+    const requiredAlreadyMarkedIssue =
+      lablesNames.find(
+        a => a === this.options.requiredIssueAlreadyMarkedLabel
+      ) && this.options.requiredIssueAlreadyMarkedLabel !== '';
 
     for (const v of this.options.requiredLables) {
       if (!lablesNames.find(a => a.includes(v))) {
         if (requiredAlreadyMarkedIssue) {
-          break
+          break;
         }
-
-
 
         const assigneLogins: string = issue.assignees
           .map(assign => `@${assign.login}`)
@@ -649,6 +650,13 @@ export class IssuesProcessor {
           repo: context.repo.repo,
           issue_number: issue.number,
           body: `${assigneLogins} ${this.options.requiredLablesMessage}`
+        });
+
+        await this.client.issues.addLabels({
+          issue_number: issue.number,
+          labels: [this.options.requiredIssueAlreadyMarkedLabel],
+          owner: context.repo.owner,
+          repo: context.repo.repo
         });
 
         break;
