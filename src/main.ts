@@ -90,7 +90,8 @@ function _getAndValidateArgs(): IIssuesProcessorOptions {
     exemptDraftPr: core.getInput('exempt-draft-pr') === 'true',
     requiredLables: core.getInput('required-labels').split(','),
     exemptionLabels: core.getInput('exemption-labels').split(','),
-    requiredLablesMessage: core.getInput('required-labels-message')
+    requiredLablesMessage: core.getInput('required-labels-message'),
+    requiredIssueAlreadyMarkedLabel: core.getInput('required-issue-already-marked-label'),
   };
 
   for (const numberInput of [

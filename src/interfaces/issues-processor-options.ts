@@ -54,4 +54,5 @@ export interface IIssuesProcessorOptions {
   requiredLables: string[];
   exemptionLabels: string[];
   requiredLablesMessage: string;
+  requiredIssueAlreadyMarkedLabel: string;
 }

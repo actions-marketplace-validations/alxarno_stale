@@ -628,10 +628,18 @@ export class IssuesProcessor {
         issueLogger.info(`found exemption label: ${v}`);
         return;
       }
-    }
+    } 
+
+    let requiredAlreadyMarkedIssue = lablesNames.find(a => a == this.options.requiredIssueAlreadyMarkedLabel);
 
     for (const v of this.options.requiredLables) {
       if (!lablesNames.find(a => a.includes(v))) {
+        if (requiredAlreadyMarkedIssue) {
+          break
+        }
+
+
+
         const assigneLogins: string = issue.assignees
           .map(assign => `@${assign.login}`)
           .join(' ');
@@ -642,6 +650,7 @@ export class IssuesProcessor {
           issue_number: issue.number,
           body: `${assigneLogins} ${this.options.requiredLablesMessage}`
         });
+
         break;
       }
     }
