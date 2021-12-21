@@ -1,8 +1,8 @@
 import * as core from '@actions/core';
-import {IssuesProcessor} from './src/classes/issues-processor';
-import {isValidDate} from './src/functions/dates/is-valid-date';
-import {IIssuesProcessorOptions} from './src/interfaces/issues-processor-options';
-import {Issue} from './src/classes/issue';
+import {IssuesProcessor} from './classes/issues-processor';
+import {isValidDate} from './functions/dates/is-valid-date';
+import {IIssuesProcessorOptions} from './interfaces/issues-processor-options';
+import {Issue} from './classes/issue';
 
 async function _run(): Promise<void> {
   try {
