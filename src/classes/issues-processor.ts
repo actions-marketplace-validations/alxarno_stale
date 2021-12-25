@@ -635,8 +635,10 @@ export class IssuesProcessor {
         a => a === this.options.requiredIssueAlreadyMarkedLabel
       ) && this.options.requiredIssueAlreadyMarkedLabel !== '';
 
+    let requiredLabelsExists = true;
     for (const v of this.options.requiredLables) {
       if (!lablesNames.find(a => a.includes(v))) {
+        requiredLabelsExists = false;
         if (requiredAlreadyMarkedIssue) {
           break;
         }
@@ -661,6 +663,18 @@ export class IssuesProcessor {
         }
         break;
       }
+    }
+    if (
+      requiredAlreadyMarkedIssue &&
+      requiredLabelsExists &&
+      this.options.requiredIssueAlreadyMarkedLabel !== ''
+    ) {
+      await this.client.issues.removeLabel({
+        issue_number: issue.number,
+        owner: context.repo.owner,
+        repo: context.repo.repo,
+        name: this.options.requiredIssueAlreadyMarkedLabel
+      });
     }
   }
 

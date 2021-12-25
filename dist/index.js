@@ -721,8 +721,10 @@ class IssuesProcessor {
                 }
             }
             const requiredAlreadyMarkedIssue = lablesNames.find(a => a === this.options.requiredIssueAlreadyMarkedLabel) && this.options.requiredIssueAlreadyMarkedLabel !== '';
+            let requiredLabelsExists = true;
             for (const v of this.options.requiredLables) {
                 if (!lablesNames.find(a => a.includes(v))) {
+                    requiredLabelsExists = false;
                     if (requiredAlreadyMarkedIssue) {
                         break;
                     }
@@ -745,6 +747,16 @@ class IssuesProcessor {
                     }
                     break;
                 }
+            }
+            if (requiredAlreadyMarkedIssue &&
+                requiredLabelsExists &&
+                this.options.requiredIssueAlreadyMarkedLabel !== '') {
+                yield this.client.issues.removeLabel({
+                    issue_number: issue.number,
+                    owner: github_1.context.repo.owner,
+                    repo: github_1.context.repo.repo,
+                    name: this.options.requiredIssueAlreadyMarkedLabel
+                });
             }
         });
     }
