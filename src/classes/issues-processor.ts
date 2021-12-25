@@ -651,14 +651,14 @@ export class IssuesProcessor {
           issue_number: issue.number,
           body: `${assigneLogins} ${this.options.requiredLablesMessage}`
         });
-
-        await this.client.issues.addLabels({
-          issue_number: issue.number,
-          labels: [this.options.requiredIssueAlreadyMarkedLabel],
-          owner: context.repo.owner,
-          repo: context.repo.repo
-        });
-
+        if (this.options.requiredIssueAlreadyMarkedLabel !== '') {
+          await this.client.issues.addLabels({
+            issue_number: issue.number,
+            labels: [this.options.requiredIssueAlreadyMarkedLabel],
+            owner: context.repo.owner,
+            repo: context.repo.repo
+          });
+        }
         break;
       }
     }

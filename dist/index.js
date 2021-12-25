@@ -735,12 +735,14 @@ class IssuesProcessor {
                         issue_number: issue.number,
                         body: `${assigneLogins} ${this.options.requiredLablesMessage}`
                     });
-                    yield this.client.issues.addLabels({
-                        issue_number: issue.number,
-                        labels: [this.options.requiredIssueAlreadyMarkedLabel],
-                        owner: github_1.context.repo.owner,
-                        repo: github_1.context.repo.repo
-                    });
+                    if (this.options.requiredIssueAlreadyMarkedLabel !== '') {
+                        yield this.client.issues.addLabels({
+                            issue_number: issue.number,
+                            labels: [this.options.requiredIssueAlreadyMarkedLabel],
+                            owner: github_1.context.repo.owner,
+                            repo: github_1.context.repo.repo
+                        });
+                    }
                     break;
                 }
             }
